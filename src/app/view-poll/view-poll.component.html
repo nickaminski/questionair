@@ -1,0 +1,30 @@
+<div *ngIf="!currentPoll && !loading">
+    <h1 class="center">
+        Poll Not Found!
+    </h1>
+</div>
+<div *ngIf="currentPoll" style="margin-top: 16px;">
+
+    <h1>
+        {{ currentPoll.question }}
+    </h1>
+    <form>
+
+        <mat-radio-group [formControl]="selectedOption" 
+                         class="options-group">
+            <mat-radio-button *ngFor="let option of currentPoll.options"
+                              [value]="option.text"
+                              class="option-button">
+                {{ option.text }}
+            </mat-radio-button> 
+        </mat-radio-group>
+    
+    </form>
+
+    <button mat-raised-button
+            color="primary"
+            (click)="submitForm()"
+            [disabled]="!selectedOption.valid || loading">Submit
+    </button>
+
+</div>

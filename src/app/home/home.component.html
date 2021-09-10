@@ -1,0 +1,34 @@
+<button (click)="doCancelableSearch()" [disabled]="searching">Search</button><button (click)="cancelSearch()">Cancel</button><button (click)="viewSubscription()">View</button>
+<div *ngIf="searching">Searching...</div>
+
+<mat-tab-group>
+    <mat-tab label="Polls">
+        <div class="container">
+            <app-poll-card *ngFor="let poll of existingPolls$ | async" 
+                                 [poll]="poll"
+                                 [routerLink]="invalidPoll(poll) ? ['/results',poll.id] : ['/poll', poll.id]">
+            </app-poll-card>
+            <div *ngIf="pollFetchCompleted && pollFetchCount === 0">
+                <h1 style="padding: 16px;">No polls found</h1>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Forms">
+        <div class="container">
+            <app-form-card *ngFor="let form of existingForms$ | async"
+                           [form]=form
+                           [routerLink]="['/edit']"
+                           [queryParams]="{formId: form.formId}">
+        
+            </app-form-card>
+            <div *ngIf="formFetchCompleted && formFetchCount === 0">
+                <h1 style="padding: 16px;">No forms found</h1>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
+<div class="center" style="opacity: 10%;">
+    <svg width="100" height="100">
+        <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+    </svg>
+</div>

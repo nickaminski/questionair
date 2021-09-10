@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.router-container {
+    height: calc(100% - 64px);
+    overflow: auto;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.center {
+    position: absolute;
+    top: calc(50% - 52px);
+    left: calc(50% - 50px);
+    z-index: -1;
+}
+
+app-create-poll {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 12px;
+}
+
+app-create-form {
+    width: 100%;
+}
+
+agm-map {
+    height: 300px;
+}
+
+.snackbar-positive {
+    background-color: rgb(203, 255, 196);
+}
+
+.snackbar-negative {
+    background-color: rgb(255, 184, 184);
+}

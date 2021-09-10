@@ -1,0 +1,129 @@
+<div class="container">
+
+    <h1>Create Poll</h1>
+
+    <div *ngIf="!submitted">
+
+        <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit()">
+        
+            <div style="display: flex;">
+
+                <mat-form-field>
+                    <input matInput 
+                           formControlName="question" 
+                           placeholder="What is your question?" 
+                           id="questionId" />
+                    
+                    <mat-error *ngIf="question.errors?.required">
+                        You must ask a question
+                    </mat-error>
+                    <mat-error *ngIf="question.errors?.pattern">
+                        The question cannot be only spaces
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+    
+            <div class="action-row">
+        
+                <button mat-raised-button
+                        type="button"
+                        color="primary" 
+                        (click)="addOption()">
+                    Add Option
+                </button>
+
+                <div style="flex: 1;"></div>
+
+                <div class="expiration-date-time">
+
+                    <mat-form-field style="max-width: 120px; margin-left: 8px;">
+                        <input matInput
+                               [matDatepicker]="picker"
+                               placeholder="Expiration Date"
+                               formControlName="expirationDate">
+                        <mat-datepicker-toggle matSuffix
+                                                [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+    
+                    <div formGroupName="expirationTime" class="time-wrapper">
+                        <mat-form-field style="max-width: 80px; margin-left: 8px;">
+                            <mat-label>Hour</mat-label>
+                            <mat-select formControlName="hour">
+                                <mat-option *ngFor="let hour of hours" [value]="hour">{{hour}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+    
+                        <mat-form-field style="max-width: 80px; margin-left: 8px;">
+                            <mat-label>Minute</mat-label>
+                            <mat-select formControlName="minute">
+                                <mat-option *ngFor="let minute of minutes" [value]="minute">{{minute}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+    
+                        <mat-button-toggle-group formControlName="meridiem" style="margin-left: 8px;">
+                            <mat-button-toggle value="AM">AM</mat-button-toggle>
+                            <mat-button-toggle value="PM">PM</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+
+                </div>
+        
+            </div>
+        
+            <div formArrayName="options" *ngFor="let option of options.controls; let i=index">
+
+                <div [formGroupName]="i" style="display: flex;">
+        
+                    <mat-form-field>
+                        <input matInput 
+                               formControlName="text" 
+                               placeholder="Option" 
+                               id="{{'textId'+i}}" />
+    
+                        <mat-error *ngIf="option.get('text').errors?.required">
+                            You can not have an empty choice
+                        </mat-error>
+                        <mat-error *ngIf="option.get('text').errors?.pattern">
+                            A choice must not be only spaces
+                        </mat-error>
+                    </mat-form-field>
+        
+                    <button mat-raised-button 
+                            color="warn" 
+                            (click)="deleteOption(i)"
+                            [disabled]="options.length <= 2"
+                            [title]="options.length <= 2 ? 'You must have at least 2 choices' : ''">
+                        Delete
+                    </button>
+        
+                </div>
+        
+            </div>
+        
+            <div>
+        
+                <button mat-raised-button
+                        type="submit"
+                        style="width: 80px; margin-top: 8px;"
+                        [title]="myForm.valid ? 'Submit your poll' : 'Disabled until all fields are given input'"
+                        [disabled]="!myForm.valid">
+                    Submit
+                </button>
+        
+            </div>
+        
+        </form>
+
+    </div>
+
+    <div *ngIf="submitted && pollId">
+        Poll created. Find it here: 
+        <a [routerLink]="['/poll', pollId]">{{pollQuestion}}</a> 
+        Or create another poll: 
+        <button mat-raised-button 
+                (click)="refresh()">New Poll</button>
+    </div>
+
+</div>

@@ -1,0 +1,937 @@
+<div class="form-wrapper">
+    <div class="side-panel-container">
+    
+        <div class="side-panel" [style.top.px]="sidePanelPos">
+            <div class="side-panel-button-wrapper"
+                 matRipple
+                 [matRippleCentered]="true"
+                 [matRippleUnbounded]="true"
+                 [matRippleRadius]="18"
+                 [matRippleColor]="rippleColor"
+                 (click)="addQuestion(null, currentSectionIndex)">
+                <div class="circle-button"
+                     matTooltip="Add question"
+                     matTooltipPosition="right">
+                    <mat-icon>add_circle_outline</mat-icon>
+                </div>
+            </div>
+
+            <div class="side-panel-button-wrapper"
+                 matRipple
+                 [matRippleCentered]="true"
+                 [matRippleUnbounded]="true"
+                 [matRippleRadius]="18"
+                 [matRippleColor]="rippleColor">
+                 <div class="circle-button"
+                      matTooltip="Import questions"
+                      matTooltipPosition="right">
+                    <mat-icon>read_more</mat-icon>
+                </div>
+            </div>
+
+            <div class="side-panel-button-wrapper"
+                 matRipple
+                 [matRippleCentered]="true"
+                 [matRippleUnbounded]="true"
+                 [matRippleRadius]="18"
+                 [matRippleColor]="rippleColor">
+                 <div class="circle-button"
+                      matTooltip="Add title and description"
+                      matTooltipPosition="right">
+                    <mat-icon>text_fields</mat-icon>
+                </div>
+            </div>
+
+            <div class="side-panel-button-wrapper"
+                 matRipple
+                 [matRippleCentered]="true"
+                 [matRippleUnbounded]="true"
+                 [matRippleRadius]="18"
+                 [matRippleColor]="rippleColor">
+                 <div class="circle-button"
+                      matTooltip="Add image"
+                      matTooltipPosition="right">
+                    <mat-icon>insert_photo</mat-icon>
+                </div>
+            </div>
+
+            <div class="side-panel-button-wrapper"
+                 matRipple
+                 [matRippleCentered]="true"
+                 [matRippleUnbounded]="true"
+                 [matRippleRadius]="18"
+                 [matRippleColor]="rippleColor">
+                 <div class="circle-button"
+                      matTooltip="Add video"
+                      matTooltipPosition="right">
+                    <mat-icon>smart_display</mat-icon>
+                </div>
+            </div>
+
+            <div class="side-panel-button-wrapper"
+                 matRipple
+                 [matRippleCentered]="true"
+                 [matRippleUnbounded]="true"
+                 [matRippleRadius]="18"
+                 [matRippleColor]="rippleColor"
+                 (click)="addNewSection(currentSectionIndex)">
+                 <div class="circle-button"
+                      matTooltip="Add section"
+                      matTooltipPosition="right">
+                    <mat-icon>view_agenda</mat-icon>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <form novalidate
+          [formGroup]="theForm"
+          *ngIf="theForm">
+
+        <div formArrayName="sections" *ngFor="let section of sections.controls; let sectionIndex=index">
+
+            <div [formGroupName]="sectionIndex">
+
+                <mat-card (click)="select($event, sectionIndex, -1, false)" [id]="section.get('sectionId').value">
+                    <div class="title-card-stripe"></div>
+        
+                    <div class="title-card-focus" *ngIf="currentQuestionIndex===-1 && currentSectionIndex===sectionIndex"></div>
+                
+                    <div class="title-card-content">
+                        <div class="title-card-row">
+                            <div class="title-card-text-wrapper">
+                                <div class="title-card-text">
+                                    <mat-form-field [floatLabel]="'never'" class="thin-field">
+
+                                        <textarea matInput
+                                                  style="height: 35px !important;"
+                                                  placeholder="Form title" 
+                                                  cdkTextareaAutosize="true"
+                                                  formControlName="sectionTitle"
+                                                  (blur)="checkEmptyTitle(sectionIndex)"></textarea>
+
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="title-card-actions" *ngIf="sections.length > 1">
+
+                                <div class="side-panel-button-wrapper"
+                                    matRipple
+                                    [matRippleCentered]="true"
+                                    [matRippleUnbounded]="true"
+                                    [matRippleRadius]="18"
+                                    [matRippleColor]="rippleColor">
+                                    <div class="circle-button">
+                                        <mat-icon *ngIf="!section.get('folded').value">unfold_less</mat-icon>
+                                        <mat-icon *ngIf="section.get('folded').value">unfold_more</mat-icon>
+                                    </div>
+                                </div>
+
+                                <div class="side-panel-button-wrapper"
+                                    matRipple
+                                    [matRippleCentered]="true"
+                                    [matRippleUnbounded]="true"
+                                    [matRippleRadius]="18"
+                                    [matRippleColor]="rippleColor"
+                                    [matMenuTriggerFor]="sectionMenu">
+                                    <div class="circle-button" >
+                                        <mat-icon>more_vert</mat-icon>
+                                    </div>
+                                </div>
+                                <mat-menu #sectionMenu="matMenu">
+                                    <button mat-menu-item (click)="duplicateSection(section.value)">Duplicate section</button>
+                                    <button mat-menu-item>Move section</button>
+                                    <button mat-menu-item (click)="deleteSection(sectionIndex)">Delete section</button>
+                                    <button mat-menu-item *ngIf="sectionIndex !== 0">Merge with above</button>
+                                </mat-menu>
+                            </div>
+                        </div>
+
+                        <div class="title-card-row">
+                            <div class="title-card-description-wrapper">
+                                <div class="title-card-description">
+                                    <mat-form-field [floatLabel]="'never'">
+                                        
+                                            <textarea  matInput 
+                                                       style="height: 21px !important;"
+                                                       placeholder="Section description" 
+                                                       cdkTextareaAutosize="true"
+                                                       formControlName="sectionDescription"></textarea>
+
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+        
+                <div cdkDropList
+                     class="example-list" 
+                     (cdkDropListDropped)="drop($event, sectionIndex)"
+                     [id]="sections.at(sectionIndex).get('sectionId').value"
+                     formArrayName="questions"
+                     [cdkDropListData]="questions(sectionIndex).controls"
+                     [cdkDropListConnectedTo]="sectionIds">
+                
+                    <div class="box-wrapper" 
+                         *ngFor="let question of questions(sectionIndex).controls; let questionIndex = index" 
+                         cdkDrag 
+                         cdkDragLockAxis="y">
+                
+                        <div [formGroupName]="questionIndex">
+        
+                            <mat-card (click)="select($event, sectionIndex, questionIndex, true)" 
+                                      (mouseover)="question.get('hovering').setValue(true)" 
+                                      (mouseout)="question.get('hovering').setValue(false)" 
+                                      [id]="question.get('id').value">
+                    
+                                <div class="card-focus" *ngIf="question.get('selected').value"></div>
+                     
+                                <div class="custom-placeholder" *cdkDragPlaceholder></div>
+                     
+                                <div class="drag-icon" cdkDragHandle>
+                                    <mat-icon *ngIf="question.get('selected').value || question.get('hovering').value">more_horiz</mat-icon>
+                                </div>
+                         
+                                <div class="card-content">
+         
+                                    <div class="card-row">
+                                   
+                                        <mat-form-field [appearance]="question.get('selected').value?'fill':'standard'" style="font-size: 16px;">
+                                            <textarea matInput
+                                                      placeholder="Question" 
+                                                      cdkTextareaAutosize="true"
+                                                      formControlName="questionText"
+                                                      id="{{ 'questionText' + questionIndex }}"
+                                                      (focus)="select($event, sectionIndex, questionIndex, true)"></textarea>
+                                        </mat-form-field>
+                                    
+                                        <div class="question-image-button-wrapper" 
+                                             matRipple
+                                             [matRippleCentered]="true"
+                                             [matRippleUnbounded]="true"
+                                             [matRippleRadius]="24"
+                                             [matRippleColor]="rippleColor">
+                                            <div class="question-image-button" *ngIf="question.get('selected').value">
+                                                <mat-icon>image</mat-icon>
+                                            </div>
+                                        </div>
+                                    
+                                        <mat-form-field *ngIf="question.get('selected').value" style="max-width: 224px;">
+         
+                                            <mat-select formControlName="questionType">
+                                                <mat-select-trigger>
+                                                    <div style="display: flex; align-items: center;">
+                                                        <mat-icon style="margin-right: 16px;">{{selectedQuestionType.icon}}</mat-icon>{{selectedQuestionType.text}}
+                                                    </div>
+                                                </mat-select-trigger>
+                                                <div *ngFor="let option of options; let p = index">
+                                                    <mat-option *ngFor="let item of option.group" [value]="item.text">
+                                                        <mat-icon>{{item.icon}}</mat-icon>
+                                                        {{item.text}}
+                                                    </mat-option>
+                                                    <mat-divider *ngIf="p!=options.length-1" style="margin: 12px 0"></mat-divider>
+                                                </div>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="answer-section" formGroupName="answerContent">
+
+                                        <div class="card-row" style="padding-left: 24px; padding-bottom: 8px;" *ngIf="showOption(question, 'showDescription')">
+                                            <mat-form-field [floatLabel]="'never'" style="font-size: 12px; letter-spacing: .3px; line-height: 16px; min-height: 20px;">
+                                                <input matInput formControlName="description" placeholder="Description" />
+                                            </mat-form-field>
+                                        </div>
+         
+                                        <div class="text-answer"
+                                             *ngIf="isTextQuestion(question.get('questionType').value)">
+
+                                            <mat-form-field *ngIf="question.get('questionType').value === 'Short Answer'" class="short-text-answer">
+                                                <input matInput placeholder="Short answer text" disabled="true" />
+                                            </mat-form-field>
+
+                                            <mat-form-field *ngIf="question.get('questionType').value === 'Paragraph'" class="long-text-answer">
+                                                <input matInput placeholder="Long answer text" disabled="true" />
+                                            </mat-form-field>
+         
+                                        </div>
+         
+                                        <div class="list-answer"
+                                             *ngIf="isListQuestion(question.get('questionType').value)"
+                                             cdkDropList
+                                             (cdkDropListDropped)="dropAnswerChoice($event, choices(sectionIndex, questionIndex))"
+                                             formArrayName="choices"
+                                             [id]="'question_' + questionIndex + '_choices'">
+         
+                                            <div class="choice-boundary">
+         
+                                                <div *ngFor="let choice of choices(sectionIndex, questionIndex).controls; let p=index"
+                                                     cdkDrag
+                                                     cdkDragLockAxis="y"
+                                                     cdkDragBoundary=".choice-boundary">
+         
+                                                    <div [formGroupName]="p"
+                                                         class="list-choice">
+         
+                                                        <div class="custom-placeholder" *cdkDragPlaceholder></div>
+         
+                                                        <div class="list-drag-handle"
+                                                             [class.cursor]="questionIndex !== currentQuestionIndex"
+                                                             cdkDragHandle>
+                                                            <mat-icon [class.hide]="questionIndex !== currentQuestionIndex">drag_indicator</mat-icon>
+                                                        </div>
+                                                    
+                                                        <div class="list-bullet">
+                                                            <div *ngIf="question.get('questionType').value === 'Dropdown'">{{p + 1}}.</div>
+                                                            <mat-icon *ngIf="question.get('questionType').value === 'Multiple choice'">trip_origin</mat-icon>
+                                                            <mat-icon *ngIf="question.get('questionType').value === 'Checkboxes'">crop_square</mat-icon>
+                                                        </div>
+                                                        <div class="list-text">
+                                                            <mat-form-field>
+                                                                <input matInput 
+                                                                       formControlName="text" 
+                                                                       [id]="'section_' + sectionIndex + '_question_' + questionIndex + '_choice_' + p" />
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="list-controls" *ngIf="questionIndex === currentQuestionIndex">
+                                                            <div class="question-image-button-wrapper" 
+                                                                 style="margin: 0;" 
+                                                                 matRipple
+                                                                 [matRippleCentered]="true"
+                                                                 [matRippleUnbounded]="true"
+                                                                 [matRippleRadius]="24"
+                                                                 [matRippleColor]="rippleColor"
+                                                                 *ngIf="question.get('questionType').value !== 'Dropdown'">
+                                                                <div class="question-image-button"
+                                                                     matTooltip="Add image"
+                                                                     matTooltipPosition="below">
+                                                                    <mat-icon>image</mat-icon>
+                                                                </div>
+                                                            </div>
+                                                            <div style="width: 48px;">
+                                                                <div class="question-image-button-wrapper"
+                                                                     style="margin: 0;" 
+                                                                     matRipple
+                                                                     [matRippleCentered]="true"
+                                                                     [matRippleUnbounded]="true"
+                                                                     [matRippleRadius]="24"
+                                                                     [matRippleColor]="rippleColor"
+                                                                     *ngIf="choices(sectionIndex, questionIndex).controls.length > 1"
+                                                                     (click)="$event.stopPropagation(); removeChoice(choices(sectionIndex, questionIndex), p)">
+                                                                    <div class="question-image-button"
+                                                                        matTooltip="Remove"
+                                                                        matTooltipPosition="below">
+                                                                        <mat-icon>close</mat-icon>
+                                                                    </div>
+                                                                </div>  
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                            </div>
+         
+                                            <div class="list-choice" *ngIf="question.get('selected').value">
+                                                <div class="list-drag-handle" style="cursor: default;"></div>
+                                                <div class="list-bullet">
+                                                    <div *ngIf="question.get('questionType').value === 'Dropdown'">{{choices(sectionIndex, questionIndex).controls.length + 1}}.</div>
+                                                    <mat-icon *ngIf="question.get('questionType').value === 'Multiple choice'">trip_origin</mat-icon>
+                                                    <mat-icon *ngIf="question.get('questionType').value === 'Checkboxes'">crop_square</mat-icon>
+                                                </div>
+                                                <div class="add-list-choice-option" (click)="addOption(sectionIndex, questionIndex, choices(sectionIndex, questionIndex).length)">
+                                                    Add option
+                                                </div>
+                                                <div class="list-choice" *ngIf="question.get('questionType').value !== 'Dropdown'">
+                                                    or
+                                                    <div class="add-list-other-option"
+                                                         matRipple
+                                                         [matRippleColor]="'rgba(66,133,244,0.161)'"
+                                                         (click)="addOption(sectionIndex, questionIndex, undefined)">
+                                                        add "Other"
+                                                    </div>
+                                                </div>
+                                            </div>
+         
+                                        </div>
+
+                                        <div class="file-answer"
+                                             *ngIf="isFileQuestion(question.get('questionType').value)">
+
+                                            <div>
+                                                <div class="file-row">
+                                                    <div style="flex: 1">
+                                                        Allow only specific file types
+                                                    </div>
+                                                    <div>
+                                                        <mat-slide-toggle (change)="clearFileTypes()" formControlName="specificFileTypes"></mat-slide-toggle>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="question.get('answerContent').get('specificFileTypes').value" class="file-selected-types">
+                                                    <mat-checkbox (change)="toggleFileType('Document')">Document</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('Presentation')">Presentation</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('Spreadsheet')">Spreadsheet</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('Drawing')">Drawing</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('PDF')">PDF</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('Image')">Image</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('Video')">Video</mat-checkbox>
+                                                    <mat-checkbox (change)="toggleFileType('Audio')">Audio</mat-checkbox>
+                                                </div>
+                                            </div>
+                                            
+
+                                            <div class="file-row">
+                                                <div style="flex: 1">
+                                                    Maximum number of files
+                                                </div>
+                                                <div style="width: 40px;">
+                                                    <mat-form-field>
+                                                        <mat-select formControlName="maximumNumberFiles">
+                                                            <mat-option value="1">1</mat-option>
+                                                            <mat-option value="5">5</mat-option>
+                                                            <mat-option value="10">10</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+
+                                            <div class="file-row">
+                                                <div style="flex: 1">
+                                                    Maximum file size
+                                                </div>
+                                                <div style="width: 80px;">
+                                                    <mat-form-field>
+                                                        <mat-select formControlName="maximumFileSize">
+                                                            <mat-option value="1 MB">1 MB</mat-option>
+                                                            <mat-option value="10 MB">10 MB</mat-option>
+                                                            <mat-option value="100 MB">100 MB</mat-option>
+                                                            <mat-option value="1 GB">1 GB</mat-option>
+                                                            <mat-option value="10 GB">10 GB</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="scale-answer"
+                                             *ngIf="isScaleQuestion(question.get('questionType').value)">
+
+                                            <div *ngIf="questionIndex === currentQuestionIndex">
+
+                                                <div class="file-row">
+                                                    <div style="width: 40px; padding: 0 16px;">
+                                                        <mat-form-field>
+                                                            <mat-select formControlName="minValue">
+                                                                <mat-option value="0">0</mat-option>
+                                                                <mat-option value="1">1</mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div style="font-size: 14px; line-height: 20px; margin: 0 10px;">to</div>
+                                                    <div style="width: 40px; padding-left: 16px;">
+                                                        <mat-form-field>
+                                                            <mat-select formControlName="maxValue">
+                                                                <mat-option value="2">2</mat-option>
+                                                                <mat-option value="3">3</mat-option>
+                                                                <mat-option value="4">4</mat-option>
+                                                                <mat-option value="5">5</mat-option>
+                                                                <mat-option value="6">6</mat-option>
+                                                                <mat-option value="7">7</mat-option>
+                                                                <mat-option value="8">8</mat-option>
+                                                                <mat-option value="9">9</mat-option>
+                                                                <mat-option value="10">10</mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+     
+                                                <div class="file-row">
+                                                    <div style="font-size: 14px; line-height: 20px; padding-right: 10px; width: 20px;">{{question.get('answerContent').get('minValue').value}}</div>
+                                                    <mat-form-field style="width: 200px;" [floatLabel]="'never'">
+                                                        <input matInput placeholder="Label (optional)" formControlName="minLabel" />
+                                                    </mat-form-field>
+                                                </div>
+     
+                                                <div class="file-row">
+                                                    <div style="font-size: 14px; line-height: 20px; padding-right: 10px; width: 20px;">{{question.get('answerContent').get('maxValue').value}}</div>
+                                                    <mat-form-field style="width: 200px;" [floatLabel]="'never'">
+                                                        <input matInput placeholder="Label (optional)" formControlName="maxLabel" />
+                                                    </mat-form-field>
+                                                </div>
+
+                                            </div>
+
+                                            <div *ngIf="questionIndex !== currentQuestionIndex" class="unselected-scale">
+                                                <div class="unselected-item">
+                                                    <div class="unselected-placeholder"></div>
+                                                    <div class="unselected-label">
+                                                        {{question.get('answerContent').get('minLabel').value}}
+                                                    </div>
+                                                </div>
+                                                <div class="unselected-item" *ngFor="let num of getRange(question.get('answerContent').get('minValue').value,question.get('answerContent').get('maxValue').value)">
+                                                    <div class="unselected-number">{{num}}</div>
+                                                    <div class="unselected-bubble"><mat-icon>trip_origin</mat-icon></div>
+                                                </div>
+                                                <div class="unselected-item">
+                                                    <div class="unselected-placeholder"></div>
+                                                    <div class="unselected-label">
+                                                        {{question.get('answerContent').get('maxLabel').value}}
+                                                    </div>
+                                                </div>
+                                             </div>
+                                             
+                                        </div>
+         
+                                        <div class="grid-answer"
+                                             *ngIf="isGridQuestion(question.get('questionType').value)">
+                                            <div *ngIf="questionIndex === currentQuestionIndex" class="grid-answer">
+
+                                                <div class="grid-edit">
+                                                    <div style="font-size: 14px; letter-spacing: .2px; line-height: 20px; padding: 12px 0 0 24px;">Rows</div>
+                                                    <div class="grid-rows-container"
+                                                         cdkDropList
+                                                         formArrayName="rows"
+                                                         (cdkDropListDropped)="dropAnswerChoice($event, rows(sectionIndex, questionIndex))">
+                                                        <div cdkDrag
+                                                             cdkDragLockAxis="y"
+                                                             cdkDragBoundary=".grid-rows-container"
+                                                             *ngFor="let row of rows(sectionIndex, questionIndex).controls; let r=index">
+                                                            <div [formGroupName]="r" 
+                                                                 class="list-choice">
+    
+                                                                <div class="custom-placeholder" *cdkDragPlaceholder></div>
+    
+                                                                <div class="list-drag-handle"
+                                                                     [class.cursor]="questionIndex !== currentQuestionIndex"
+                                                                     cdkDragHandle>
+                                                                    <mat-icon [class.hide]="questionIndex !== currentQuestionIndex">drag_indicator</mat-icon>
+                                                                </div>
+                                                                <div class="grid-row-number" style="width: 22px;">{{r+1}}.</div>
+                                                                <div style="display: flex; flex-wrap: wrap; flex: 1;">
+                                                                    <div class="grid-row-text">
+                                                                        <mat-form-field>
+                                                                            <input matInput 
+                                                                                   formControlName="text" 
+                                                                                   [id]="'section_' + sectionIndex + '_question_' + questionIndex + '_row_' + r" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div style="width: 48px;">
+                                                                        <div class="question-image-button-wrapper"
+                                                                             style="margin: 0;" 
+                                                                             matRipple
+                                                                             [matRippleCentered]="true"
+                                                                             [matRippleUnbounded]="true"
+                                                                             [matRippleRadius]="24"
+                                                                             [matRippleColor]="rippleColor"
+                                                                             *ngIf="rows(sectionIndex, questionIndex).controls.length > 1"
+                                                                             (click)="$event.stopPropagation(); removeChoice(rows(sectionIndex, questionIndex), r)">
+                                                                            <div class="question-image-button"
+                                                                                matTooltip="Remove"
+                                                                                matTooltipPosition="below">
+                                                                                <mat-icon>close</mat-icon>
+                                                                            </div>
+                                                                        </div>  
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-choice" *ngIf="question.get('selected').value">
+                                                        <div class="list-drag-handle" style="cursor: default;"></div>
+                                                        <div class="grid-row-number" style="width: 22px;">
+                                                            <div>{{rows(sectionIndex, questionIndex).controls.length + 1}}.</div>
+                                                        </div>
+                                                        <div style="display: flex; flex-wrap: wrap; flex: 1; height: 48px; align-content: center;">
+                                                            <div class="add-list-choice-option" (click)="addRow(sectionIndex, questionIndex, rows(sectionIndex, questionIndex).length)">
+                                                                Add row
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="grid-edit">
+                                                    <div style="font-size: 14px; letter-spacing: .2px; line-height: 20px; padding: 12px 0 0 24px;">Columns</div>
+                                                    <div class="grid-rows-container"
+                                                         cdkDropList
+                                                         formArrayName="columns"
+                                                         (cdkDropListDropped)="dropAnswerChoice($event, columns(sectionIndex, questionIndex))">
+                                                        <div cdkDrag
+                                                             cdkDragLockAxis="y"
+                                                             cdkDragBoundary=".grid-rows-container"
+                                                             *ngFor="let column of columns(sectionIndex, questionIndex).controls; let c=index">
+                                                            <div [formGroupName]="c" 
+                                                                 class="list-choice">
+
+                                                                <div class="custom-placeholder" *cdkDragPlaceholder></div>
+
+                                                                <div class="list-drag-handle"
+                                                                     [class.cursor]="questionIndex !== currentQuestionIndex"
+                                                                     cdkDragHandle>
+                                                                    <mat-icon [class.hide]="questionIndex !== currentQuestionIndex">drag_indicator</mat-icon>
+                                                                </div>
+                                                                <div class="grid-row-number" style="width: 30px;">
+                                                                    <mat-icon *ngIf="question.get('questionType').value === 'Multiple choice grid'">trip_origin</mat-icon>
+                                                                    <mat-icon *ngIf="question.get('questionType').value === 'Checkbox grid'">crop_square</mat-icon>
+                                                                </div>
+                                                                <div style="display: flex; flex-wrap: wrap; flex: 1;">
+                                                                    <div class="grid-row-text">
+                                                                        <mat-form-field>
+                                                                            <input matInput 
+                                                                                   formControlName="text" 
+                                                                                   [id]="'section_' + sectionIndex + '_question_' + questionIndex + '_column_' + c" />
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div style="width: 48px;">
+                                                                        <div class="question-image-button-wrapper"
+                                                                             style="margin: 0;" 
+                                                                             matRipple
+                                                                             [matRippleCentered]="true"
+                                                                             [matRippleUnbounded]="true"
+                                                                             [matRippleRadius]="24"
+                                                                             [matRippleColor]="rippleColor"
+                                                                             *ngIf="columns(sectionIndex, questionIndex).controls.length > 1"
+                                                                             (click)="$event.stopPropagation(); removeChoice(columns(sectionIndex, questionIndex), c)">
+                                                                            <div class="question-image-button"
+                                                                                matTooltip="Remove"
+                                                                                matTooltipPosition="below">
+                                                                                <mat-icon>close</mat-icon>
+                                                                            </div>
+                                                                        </div>  
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-choice" *ngIf="question.get('selected').value">
+                                                        <div class="list-drag-handle" style="cursor: default;"></div>
+                                                        <div class="grid-row-number" style="width: 30px;">
+                                                            <mat-icon *ngIf="question.get('questionType').value === 'Multiple choice grid'">trip_origin</mat-icon>
+                                                            <mat-icon *ngIf="question.get('questionType').value === 'Checkbox grid'">crop_square</mat-icon>
+                                                        </div>
+                                                        <div style="display: flex; flex-wrap: wrap; flex: 1; height: 48px; align-content: center;">
+                                                            <div class="add-list-choice-option" (click)="addColumn(sectionIndex, questionIndex, columns(sectionIndex, questionIndex).length)">
+                                                                Add column
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div *ngIf="questionIndex !== currentQuestionIndex" class="grid-table">
+
+                                                <div class="grid-table-row">
+                                                    <div class="grid-table-cell"></div>
+                                                    <div class="grid-table-cell" 
+                                                         *ngFor="let column of columns(sectionIndex, questionIndex).controls">
+                                                        {{column.get('text').value}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid-table-row"
+                                                     *ngFor="let row of rows(sectionIndex, questionIndex).controls; let r=index">
+                                                    <div class="grid-table-cell">{{row.get('text').value}}</div>
+                                                    <div class="grid-table-cell" 
+                                                         *ngFor="let column of columns(sectionIndex, questionIndex).controls">
+                                                        <mat-icon *ngIf="question.get('questionType').value === 'Multiple choice grid'">trip_origin</mat-icon>
+                                                        <mat-icon *ngIf="question.get('questionType').value === 'Checkbox grid'">crop_square</mat-icon>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+         
+                                        <div class="date-answer"
+                                             *ngIf="isDateQuestion(question.get('questionType').value)">
+         
+                                            <div class="date-time-input">
+                                                <div style="display:flex; flex: 1;">
+                                                    <div>Month, day</div><div *ngIf="question.get('answerContent').get('includeYear').value">, year</div>
+                                                </div>
+                                                <mat-icon>event</mat-icon>
+                                            </div>
+
+                                            <div class="date-time-input" *ngIf="question.get('answerContent').get('includeTime').value">
+                                                <div style="flex: 1;">Time</div>
+                                                <mat-icon>query_builder</mat-icon>
+                                            </div>
+         
+                                        </div>
+         
+                                        <div class="time-answer"
+                                             *ngIf="isTimeQuestion(question.get('questionType').value)">
+         
+                                            <div class="date-time-input">
+                                                <div style="flex: 1;" *ngIf="showOption(question, 'timeDuration')">Time</div>
+                                                <div style="flex: 1;" *ngIf="!showOption(question, 'timeDuration')">Duration</div>
+                                                <mat-icon>query_builder</mat-icon>
+                                            </div>
+         
+                                        </div>
+
+                                        <div class="location-answer" 
+                                             *ngIf="isLocationQuestion(question.get('questionType').value)">
+
+                                                <div *ngIf="questionIndex !== currentQuestionIndex">
+                                                    <div class="map-search">
+                                                        <mat-form-field>
+                                                            <input matInput 
+                                                                   placeholder="Find address or place" disabled="true" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                    
+                                                    <div class="map-container">
+                                                        <google-map *ngIf="apiLoaded | async"
+                                                                    [center]="question.get('answerContent').get('center').value"
+                                                                    [zoom]="10.5">
+                                                                    <!--(mapClick)="selectMapPosition($event, question)"-->
+                                                            <map-marker *ngIf="question.get('answerContent').get('lat').value && question.get('answerContent').get('lon').value" 
+                                                                [position]="getMapPosition(question.get('answerContent').get('lat').value,question.get('answerContent').get('lon').value)"></map-marker>
+                                                        </google-map>
+                                                    </div>
+                                                    <div class="map-coordinates">
+                                                        <div style="flex: 1; padding-right: 12px;">
+                                                            <mat-form-field>
+                                                                <input matInput placeholder="Lat" disabled="true" />
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div style="flex: 1">
+                                                            <mat-form-field>
+                                                                <input matInput placeholder="Lon" disabled="true" />
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                        </div>
+         
+                                    </div>
+                                    <div *ngIf="question.get('selected').value" style="margin-left: 12px;">
+                                        <mat-divider [inset]="true"></mat-divider>
+                                        <div class="card-row" style="height: 65px; align-items: center;">
+                                            <div style="flex: 1;"></div>
+         
+                                            <div class="question-image-button-wrapper" matRipple
+                                                [matRippleCentered]="true"
+                                                [matRippleUnbounded]="true"
+                                                [matRippleRadius]="24"
+                                                [matRippleColor]="rippleColor">
+                                                <div class="question-image-button"
+                                                     (click)="$event.stopPropagation(); duplicateQuestion(questionIndex)"
+                                                     matTooltip="Duplicate"
+                                                     matTooltipPosition="below">
+                                                    <mat-icon>content_copy</mat-icon>
+                                                </div>
+                                            </div>
+         
+                                            <div class="question-image-button-wrapper" matRipple
+                                                [matRippleCentered]="true"
+                                                [matRippleUnbounded]="true"
+                                                [matRippleRadius]="24"
+                                                [matRippleColor]="rippleColor">
+                                                <div class="question-image-button"
+                                                     (click)="deleteQuestion(sectionIndex, questionIndex)"
+                                                     matTooltip="Delete"
+                                                     matTooltipPosition="below">
+                                                    <mat-icon>delete</mat-icon>
+                                                </div>
+                                            </div>
+         
+                                            <div style="border-left: 1px solid rgba(255,255,255,.12); height: 32px; margin: 0 16px; width: 0;"></div>
+         
+                                            <mat-slide-toggle [labelPosition]="'before'" 
+                                                              formControlName="required">Required</mat-slide-toggle>
+         
+                                            <div class="question-image-button-wrapper" matRipple
+                                                [matRippleCentered]="true"
+                                                [matRippleUnbounded]="true"
+                                                [matRippleRadius]="24"
+                                                [matRippleColor]="rippleColor"
+                                                [matMenuTriggerFor]="questionMenu">
+                                                <div class="question-image-button">
+                                                    <mat-icon>more_vert</mat-icon>
+                                                </div>
+                                            </div>
+                                            <mat-menu #questionMenu="matMenu">
+                                                <div class="menu-helper-text">Show</div>
+                                                <div class="menu-row">
+                                                    <mat-icon *ngIf="showOption(question,'showDescription')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'showDescription')"
+                                                            [class.menu-row-selected]="showOption(question,'showDescription')">
+                                                            Description
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="isTextQuestion(question.get('questionType').value) ||
+                                                                             question.get('questionType').value === 'Checkboxes'">
+                                                    <mat-icon *ngIf="showOption(question,'responseValidation')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'responseValidation')"
+                                                            [class.menu-row-selected]="showOption(question,'responseValidation')">
+                                                            Response validation
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="isDateQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="showOption(question,'includeTime')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'includeTime')"
+                                                            [class.menu-row-selected]="showOption(question,'includeTime')">
+                                                            Include time
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="isDateQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="showOption(question,'includeYear')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'includeYear')"
+                                                            [class.menu-row-selected]="showOption(question,'includeYear')">
+                                                            Include year
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="question.get('questionType').value === 'Multiple choice' ||
+                                                                             question.get('questionType').value === 'Dropdown'">
+                                                    <mat-icon *ngIf="showOption(question, 'goToSection')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'goToSection')"
+                                                            [class.menu-row-selected]="showOption(question, 'goToSection')">
+                                                            Go to section based on answer
+                                                    </button>
+                                                </div>
+                                                <mat-divider></mat-divider>
+                                                <div class="menu-row" *ngIf="isListQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="showOption(question, 'shuffleOptionOrder')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'shuffleOptionOrder')"
+                                                            [class.menu-row-selected]="showOption(question, 'shuffleOptionOrder')">
+                                                            Shuffle option order
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="isGridQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="showOption(question, 'limitColumnResponse')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'limitColumnResponse')"
+                                                            [class.menu-row-selected]="showOption(question, 'limitColumnResponse')">
+                                                            Limit to one response per column
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="isGridQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="showOption(question, 'shuffleRowOrder')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'shuffleRowOrder')"
+                                                            [class.menu-row-selected]="showOption(question, 'shuffleRowOrder')">
+                                                            Shuffle row order
+                                                    </button>
+                                                </div>
+                                                <div class="menu-helper-text" *ngIf="isTimeQuestion(question.get('questionType').value)">Answer type</div>
+                                                <div class="menu-row" *ngIf="isTimeQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="showOption(question, 'timeDuration')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'timeDuration')"
+                                                            [class.menu-row-selected]="showOption(question, 'timeDuration')">
+                                                            Time
+                                                    </button>
+                                                </div>
+                                                <div class="menu-row" *ngIf="isTimeQuestion(question.get('questionType').value)">
+                                                    <mat-icon *ngIf="!showOption(question, 'timeDuration')">done</mat-icon>
+                                                    <button mat-menu-item
+                                                            (click)="toggleQuestionMeta(question, 'timeDuration')"
+                                                            [class.menu-row-selected]="!showOption(question, 'timeDuration')">
+                                                            Duration
+                                                    </button>
+                                                </div>
+                                            </mat-menu>
+         
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+
+            </div>  
+
+        </div>
+    </form>
+</div>
+<div class="mobile-side-panel-container">
+    <div class="mobile-side-panel-box">
+        <div class="mobile-side-panel-box-contents">
+
+            <div class="mobile-side-panel-button-wrapper" (click)="addQuestion(null, currentSectionIndex)" matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="18"
+            [matRippleColor]="rippleColor">
+                <div class="circle-button"
+                     matTooltip="Add question"
+                     matTooltipPosition="right">
+                    <mat-icon>add_circle_outline</mat-icon>
+                </div>
+            </div>
+
+            <div class="mobile-side-panel-button-wrapper" matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="18"
+            [matRippleColor]="rippleColor">
+                <div class="circle-button"
+                     matTooltip="Import questions"
+                     matTooltipPosition="right">
+                    <mat-icon>read_more</mat-icon>
+                </div>
+            </div>
+
+            <div class="mobile-side-panel-button-wrapper" matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="18"
+            [matRippleColor]="rippleColor">
+                <div class="circle-button"
+                     matTooltip="Add title and description"
+                     matTooltipPosition="right">
+                    <mat-icon>text_fields</mat-icon>
+                </div>
+            </div>
+
+            <div class="mobile-side-panel-button-wrapper" matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="18"
+            [matRippleColor]="rippleColor">
+                <div class="circle-button"
+                     matTooltip="Add image"
+                     matTooltipPosition="right">
+                    <mat-icon>insert_photo</mat-icon>
+                </div>
+            </div>
+
+            <div class="mobile-side-panel-button-wrapper" matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="18"
+            [matRippleColor]="rippleColor">
+                <div class="circle-button"
+                     matTooltip="Add video"
+                     matTooltipPosition="right">
+                    <mat-icon>smart_display</mat-icon>
+                </div>
+            </div>
+
+            <div class="mobile-side-panel-button-wrapper" matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="24"
+            [matRippleColor]="rippleColor"
+            (click)="addNewSection(currentSectionIndex)">
+                <div class="circle-button"
+                     matTooltip="Add section"
+                     matTooltipPosition="right">
+                    <mat-icon>view_agenda</mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
