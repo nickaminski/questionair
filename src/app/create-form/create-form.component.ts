@@ -30,11 +30,16 @@ export class CreateFormComponent implements OnInit, OnDestroy {
   listenerRef: any;
   rippleColor = 'rgba(0, 0, 0, .25)';
 
+  sidePanelHeightCorrect = 335;
+
   scrollingSubject: Subject<boolean>;
   scrollingObservable$: Observable<boolean>;
 
+  scrollTargetId = 'scrollingElement';
+
   sidePanelPos = 0; 
   scrollCorrect = -76;
+  
 
   get sections(): FormArray {
     return <FormArray>this.theForm.get('sections');
@@ -150,7 +155,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     this.scrollingSubject = new Subject<boolean>();
     this.scrollingObservable$ = this.scrollingSubject.asObservable();
 
-    this.listenerRef = this.renderer.listen(document.getElementById('routerElement'), 'scroll', this.fireScrollEvent.bind(this));
+    this.listenerRef = this.renderer.listen(document.getElementById(this.scrollTargetId), 'scroll', this.fireScrollEvent.bind(this));
 
     setTimeout(() => {
       this.selectedElem = document.getElementById(this.sections.at(0).value.sectionId);
@@ -414,7 +419,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
   moveSidePanel(target, correction) {
     setTimeout(() => {
       const rect = target.getBoundingClientRect();
-      var ref = document.getElementById('routerElement');
+      var ref = document.getElementById(this.scrollTargetId);
       this.sidePanelPos = this.clamp(rect.y + correction + ref.scrollTop, 
                             ref.scrollTop,
                             ref.scrollTop + ref.getBoundingClientRect().height);
@@ -480,9 +485,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
   }
 
   private clamp(value, minHeight, maxHeight) : number {
-    if (value + 265 > maxHeight)
+    if (value + this.sidePanelHeightCorrect > maxHeight)
     {
-      value = maxHeight - 265;
+      value = maxHeight - this.sidePanelHeightCorrect;
     }
     else if (value < minHeight)
     {

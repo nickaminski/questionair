@@ -85,9 +85,10 @@
         
     </div>
 
-    <form novalidate
-          [formGroup]="theForm"
-          *ngIf="theForm">
+    <form
+        novalidate
+        [formGroup]="theForm"
+        *ngIf="theForm">
 
         <div formArrayName="sections" *ngFor="let section of sections.controls; let sectionIndex=index">
 

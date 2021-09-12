@@ -12,7 +12,7 @@
         <a mat-list-item routerLink='/edit'>Create Form</a>
       </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content id="scrollingElement">
       <mat-toolbar color="primary">
         <button
           type="button"
@@ -24,7 +24,7 @@
         </button>
         <span (click)="goHome()" style="cursor: pointer;">pollar</span>
       </mat-toolbar>
-      <div id="routerElement" class="router-container">
+      <div class="router-container">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
