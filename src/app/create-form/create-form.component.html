@@ -1,6 +1,6 @@
 <div class="form-wrapper">
-    <div class="side-panel-container">
-    
+    <div class="side-panel-container" [style.bottom.px]="sidePanelContainerPos">
+
         <div class="side-panel" [style.top.px]="sidePanelPos">
             <div class="side-panel-button-wrapper"
                  matRipple
@@ -856,83 +856,4 @@
 
         </div>
     </form>
-</div>
-<div class="mobile-side-panel-container">
-    <div class="mobile-side-panel-box">
-        <div class="mobile-side-panel-box-contents">
-
-            <div class="mobile-side-panel-button-wrapper" (click)="addQuestion(null, currentSectionIndex)" matRipple
-            [matRippleCentered]="true"
-            [matRippleUnbounded]="true"
-            [matRippleRadius]="18"
-            [matRippleColor]="rippleColor">
-                <div class="circle-button"
-                     matTooltip="Add question"
-                     matTooltipPosition="right">
-                    <mat-icon>add_circle_outline</mat-icon>
-                </div>
-            </div>
-
-            <div class="mobile-side-panel-button-wrapper" matRipple
-            [matRippleCentered]="true"
-            [matRippleUnbounded]="true"
-            [matRippleRadius]="18"
-            [matRippleColor]="rippleColor">
-                <div class="circle-button"
-                     matTooltip="Import questions"
-                     matTooltipPosition="right">
-                    <mat-icon>read_more</mat-icon>
-                </div>
-            </div>
-
-            <div class="mobile-side-panel-button-wrapper" matRipple
-            [matRippleCentered]="true"
-            [matRippleUnbounded]="true"
-            [matRippleRadius]="18"
-            [matRippleColor]="rippleColor">
-                <div class="circle-button"
-                     matTooltip="Add title and description"
-                     matTooltipPosition="right">
-                    <mat-icon>text_fields</mat-icon>
-                </div>
-            </div>
-
-            <div class="mobile-side-panel-button-wrapper" matRipple
-            [matRippleCentered]="true"
-            [matRippleUnbounded]="true"
-            [matRippleRadius]="18"
-            [matRippleColor]="rippleColor">
-                <div class="circle-button"
-                     matTooltip="Add image"
-                     matTooltipPosition="right">
-                    <mat-icon>insert_photo</mat-icon>
-                </div>
-            </div>
-
-            <div class="mobile-side-panel-button-wrapper" matRipple
-            [matRippleCentered]="true"
-            [matRippleUnbounded]="true"
-            [matRippleRadius]="18"
-            [matRippleColor]="rippleColor">
-                <div class="circle-button"
-                     matTooltip="Add video"
-                     matTooltipPosition="right">
-                    <mat-icon>smart_display</mat-icon>
-                </div>
-            </div>
-
-            <div class="mobile-side-panel-button-wrapper" matRipple
-            [matRippleCentered]="true"
-            [matRippleUnbounded]="true"
-            [matRippleRadius]="24"
-            [matRippleColor]="rippleColor"
-            (click)="addNewSection(currentSectionIndex)">
-                <div class="circle-button"
-                     matTooltip="Add section"
-                     matTooltipPosition="right">
-                    <mat-icon>view_agenda</mat-icon>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

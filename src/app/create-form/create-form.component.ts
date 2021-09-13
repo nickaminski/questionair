@@ -34,12 +34,14 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   scrollingSubject: Subject<boolean>;
   scrollingObservable$: Observable<boolean>;
+  scollingInstantObservable$: Observable<boolean>;
 
   scrollTargetId = 'scrollingElement';
 
   sidePanelPos = 0; 
   scrollCorrect = -76;
-  
+
+  sidePanelContainerPos = 0;  
 
   get sections(): FormArray {
     return <FormArray>this.theForm.get('sections');
@@ -154,12 +156,18 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
     this.scrollingSubject = new Subject<boolean>();
     this.scrollingObservable$ = this.scrollingSubject.asObservable();
+    this.scollingInstantObservable$ = this.scrollingSubject.asObservable();
 
     this.listenerRef = this.renderer.listen(document.getElementById(this.scrollTargetId), 'scroll', this.fireScrollEvent.bind(this));
 
     setTimeout(() => {
       this.selectedElem = document.getElementById(this.sections.at(0).value.sectionId);
       this.moveSidePanel(this.selectedElem, this.scrollCorrect);
+    });
+
+    this.scollingInstantObservable$.subscribe(complete => {
+      var ref = document.getElementById(this.scrollTargetId);
+      this.sidePanelContainerPos = ref.scrollTop * -1;
     });
 
     this.scrollingObservable$.pipe(debounceTime(40)).subscribe(complete => {
@@ -420,9 +428,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const rect = target.getBoundingClientRect();
       var ref = document.getElementById(this.scrollTargetId);
-      this.sidePanelPos = this.clamp(rect.y + correction + ref.scrollTop, 
-                            ref.scrollTop,
-                            ref.scrollTop + ref.getBoundingClientRect().height);
+      this.sidePanelPos = this.clamp(rect.y + correction + ref.scrollTop + this.sidePanelContainerPos, 
+                            ref.scrollTop + this.sidePanelContainerPos,
+                            ref.scrollTop + ref.getBoundingClientRect().height + this.sidePanelContainerPos);
     });
   }
 
