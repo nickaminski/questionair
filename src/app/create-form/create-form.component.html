@@ -685,13 +685,16 @@
                                                     </div>
                                                     
                                                     <div class="map-container">
-                                                        <google-map *ngIf="apiLoaded | async"
-                                                                    [center]="question.get('answerContent').get('center').value"
-                                                                    [zoom]="10.5">
-                                                                    <!--(mapClick)="selectMapPosition($event, question)"-->
-                                                            <map-marker *ngIf="question.get('answerContent').get('lat').value && question.get('answerContent').get('lon').value" 
-                                                                [position]="getMapPosition(question.get('answerContent').get('lat').value,question.get('answerContent').get('lon').value)"></map-marker>
-                                                        </google-map>
+                                                        <!--
+                                                            <div *ngIf="apiLoaded | async">
+                                                                <google-map [center]="question.get('answerContent').get('center')?.value"
+                                                                            [zoom]="10.5">
+                                                                            (mapClick)="selectMapPosition($event, question)"
+                                                                    <map-marker *ngIf="question.get('answerContent').get('lat')?.value && question.get('answerContent').get('lon')?.value" 
+                                                                        [position]="getMapPosition(question.get('answerContent').get('lat')?.value,question.get('answerContent').get('lon')?.value)"></map-marker>
+                                                                </google-map>
+                                                            </div>
+                                                        -->
                                                     </div>
                                                     <div class="map-coordinates">
                                                         <div style="flex: 1; padding-right: 12px;">
