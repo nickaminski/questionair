@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
@@ -19,7 +19,7 @@ import { LoggerService } from '../services/logger.service';
 })
 export class CreateFormComponent implements OnInit, OnDestroy {
 
-  theForm: FormGroup;
+  theForm: UntypedFormGroup;
 
   selectedQuestionType: any;
   selectedElem: any;
@@ -43,35 +43,35 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   sidePanelContainerPos = 0;  
 
-  get sections(): FormArray {
-    return <FormArray>this.theForm.get('sections');
+  get sections(): UntypedFormArray {
+    return <UntypedFormArray>this.theForm.get('sections');
   }
 
   get sectionIds(): string[] {
     return this.sections.controls.map(x => x.get('sectionId').value);
   }
 
-  questions(sectionIndex: number): FormArray {
-    return <FormArray>this.sections.at(sectionIndex).get('questions');
+  questions(sectionIndex: number): UntypedFormArray {
+    return <UntypedFormArray>this.sections.at(sectionIndex).get('questions');
   }
 
-  choices(sectionIndex: number, questionIndex: number): FormArray {
-    return <FormArray>this.questions(sectionIndex).at(questionIndex).get('answerContent').get('choices');
+  choices(sectionIndex: number, questionIndex: number): UntypedFormArray {
+    return <UntypedFormArray>this.questions(sectionIndex).at(questionIndex).get('answerContent').get('choices');
   }
 
-  rows(sectionIndex: number, questionIndex: number): FormArray {
-    return <FormArray>this.questions(sectionIndex).at(questionIndex).get('answerContent').get('rows');
+  rows(sectionIndex: number, questionIndex: number): UntypedFormArray {
+    return <UntypedFormArray>this.questions(sectionIndex).at(questionIndex).get('answerContent').get('rows');
   }
   
-  columns(sectionsIndex: number, questionIndex: number): FormArray {
-    return <FormArray>this.questions(sectionsIndex).at(questionIndex).get('answerContent').get('columns');
+  columns(sectionsIndex: number, questionIndex: number): UntypedFormArray {
+    return <UntypedFormArray>this.questions(sectionsIndex).at(questionIndex).get('answerContent').get('columns');
   }
 
   options = [...form_options];
 
   apiLoaded: Observable<boolean>;
 
-  constructor(private fb: FormBuilder, private renderer: Renderer2, private guidService: GuidService, httpClient: HttpClient, private formService: FormService, private logger: LoggerService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) {
+  constructor(private fb: UntypedFormBuilder, private renderer: Renderer2, private guidService: GuidService, httpClient: HttpClient, private formService: FormService, private logger: LoggerService, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) {
     this.apiLoaded = httpClient.jsonp(`https://maps.googleapis.com/maps/api/js?key=${google_api_key}`, 'callback')
                                .pipe(
                                   map(() => true),
@@ -192,7 +192,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private buildNewSection(sectionTitle: string): FormGroup {
+  private buildNewSection(sectionTitle: string): UntypedFormGroup {
     this.theForm.markAsDirty();
     return this.fb.group({
       sectionId: this.guidService.newGuid(),
@@ -228,7 +228,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  dropAnswerChoice(event: CdkDragDrop<FormGroup[]>, list: FormArray) {
+  dropAnswerChoice(event: CdkDragDrop<UntypedFormGroup[]>, list: UntypedFormArray) {
     moveItemInArray(list.controls, event.previousIndex, event.currentIndex);
     this.theForm.markAsDirty();
   }
@@ -252,7 +252,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  buildQuestionForm(data): FormGroup {
+  buildQuestionForm(data): UntypedFormGroup {
     this.resetSelectedQuestion();
     const group = this.fb.group({
       questionText: '',
@@ -379,7 +379,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     newSection.get('sectionDescription').setValue(sectionData.sectionDescription);
     for(var x = 0; x < sectionData.questions.length; x++)
     {
-      (<FormArray>newSection.get('questions')).insert(x, this.buildQuestionForm(sectionData.questions[x]));
+      (<UntypedFormArray>newSection.get('questions')).insert(x, this.buildQuestionForm(sectionData.questions[x]));
     }
 
     this.sections.insert(this.currentSectionIndex + 1, newSection);
@@ -487,7 +487,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     this.theForm.markAsDirty();
   }
 
-  removeChoice(list: FormArray, choiceIndex: number) {
+  removeChoice(list: UntypedFormArray, choiceIndex: number) {
     list.removeAt(choiceIndex);
     this.theForm.markAsDirty();
   }
@@ -537,7 +537,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
           hovering: false
       }));  
     }
-    (<FormGroup>group.get('answerContent')).setControl('choices', newChoices);
+    (<UntypedFormGroup>group.get('answerContent')).setControl('choices', newChoices);
   }
 
   private duplicateRowsColumns(data, group) {
@@ -553,15 +553,15 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       let currentCol = data.answerContent.columns[x];
       newCols.push(this.fb.group({ text: currentCol.text, hovering: false }))
     }
-    (<FormGroup>group.get('answerContent')).setControl('rows', newRows);
-    (<FormGroup>group.get('answerContent')).setControl('columns', newCols);
+    (<UntypedFormGroup>group.get('answerContent')).setControl('rows', newRows);
+    (<UntypedFormGroup>group.get('answerContent')).setControl('columns', newCols);
   }
 
   private getSectionTitle(sectionIndex: number) {
     return sectionIndex === 0 ? 'Untitled form' : 'Untitled section';
   }
 
-  private buildAnswerContent(questionType: string): FormGroup {
+  private buildAnswerContent(questionType: string): UntypedFormGroup {
     if (this.isListQuestion(questionType))
     {
       return this.fb.group({
