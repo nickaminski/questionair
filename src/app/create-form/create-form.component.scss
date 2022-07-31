@@ -43,7 +43,7 @@ form {
     cursor: pointer;
 }
 
-.side-panel-button-wrapper:hover, .mobile-side-panel-button-wrapper:hover {
+.side-panel-button-wrapper:hover {
     color: #5f6368;
     fill: #5f6368;
     background-image: radial-gradient(circle farthest-side,rgba(95,99,104,0.161),rgba(95,99,104,0.161) 80%,rgba(95,99,104,0) 100%);
@@ -59,15 +59,6 @@ form {
     display: inline-block;
     position: relative;
     border-radius: 50%;
-}
-
-.mobile-side-panel-button-wrapper {
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .question-image-button-wrapper {
@@ -124,10 +115,6 @@ form {
     position: absolute;
     display: block;
     color: #757575;
-}
-
-.mobile-side-panel-container {
-    display: none;
 }
 
 .form-wrapper {
