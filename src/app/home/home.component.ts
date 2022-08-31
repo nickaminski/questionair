@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { CancelService } from '../cancel.service';
 import { FormModel, FormService } from '../services/form.service';
 import { Poll, PollService } from '../services/poll.service';
@@ -74,11 +74,11 @@ export class HomeComponent implements OnInit {
     if (this.searching) return;
     
     this.searching = true;
-    this.currentRequest = this.canceller.doCancelableCall().subscribe(
-      result => { console.log('successfully returned') },
-      err => { console.log('errored: ' + err)},
-      () => { console.log('completed!'); this.searching = false; }
-    );
+    this.currentRequest = this.canceller.doCancelableCall().subscribe({
+      next: result => console.log('successfully returned'),
+      error: err => console.log('errored: ' + err),
+      complete: () => { console.log('completed!'); this.searching = false; }
+    });
   }
 
   cancelSearch() {
