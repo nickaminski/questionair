@@ -19,7 +19,6 @@
                            [form]=form
                            [routerLink]="['/edit']"
                            [queryParams]="{formId: form.formId}">
-        
             </app-form-card>
             <div *ngIf="formFetchCompleted && formFetchCount === 0">
                 <h1 style="padding: 16px;">No forms found</h1>

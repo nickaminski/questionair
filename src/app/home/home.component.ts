@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { CancelService } from '../cancel.service';
 import { FormModel, FormService } from '../services/form.service';
 import { Poll, PollService } from '../services/poll.service';

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PollResultStreamService } from '../services/poll-result-stream.service';
 import { PollResultService } from '../services/poll-result.service';
@@ -15,6 +16,7 @@ export class PollResultsComponent implements OnInit, OnDestroy {
   question: string;
 
   chartData: any[];
+  resultsSubscription: Subscription;
 
   constructor(private route: ActivatedRoute, private pollResultsService: PollResultService, private pollResultStreamService: PollResultStreamService) { }
 
@@ -38,7 +40,7 @@ export class PollResultsComponent implements OnInit, OnDestroy {
     err => {
     });
 
-    this.pollResultStreamService.onVoteReceived$.subscribe(pollChoice => {
+    this.resultsSubscription = this.pollResultStreamService.onVoteReceived$.subscribe(pollChoice => {
       if (pollChoice.userId !== this.selectedId)
         return;
 
@@ -51,6 +53,7 @@ export class PollResultsComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy() {
+    this.resultsSubscription.unsubscribe();
     this.pollResultStreamService.closeConnection();
   }
 

@@ -85,11 +85,9 @@
         
     </div>
 
-    <form
-        novalidate
-        [formGroup]="theForm"
-        *ngIf="theForm">
-
+    <form novalidate
+          [formGroup]="theForm"
+          *ngIf="theForm">
         <div formArrayName="sections" *ngFor="let section of sections.controls; let sectionIndex=index">
 
             <div [formGroupName]="sectionIndex">
@@ -104,20 +102,17 @@
                             <div class="title-card-text-wrapper">
                                 <div class="title-card-text">
                                     <mat-form-field [floatLabel]="'never'" class="thin-field">
-
                                         <textarea matInput
                                                   style="height: 35px !important;"
                                                   placeholder="Form title" 
                                                   cdkTextareaAutosize="true"
                                                   formControlName="sectionTitle"
                                                   (blur)="checkEmptyTitle(sectionIndex)"></textarea>
-
                                     </mat-form-field>
                                 </div>
                             </div>
 
                             <div class="title-card-actions" *ngIf="sections.length > 1">
-
                                 <div class="side-panel-button-wrapper"
                                     matRipple
                                     [matRippleCentered]="true"
@@ -714,7 +709,7 @@
          
                                     </div>
                                     <div *ngIf="question.get('selected').value" style="margin-left: 12px;">
-                                        <mat-divider [inset]="true"></mat-divider>
+                                        <mat-divider></mat-divider>
                                         <div class="card-row" style="height: 65px; align-items: center;">
                                             <div style="flex: 1;"></div>
          

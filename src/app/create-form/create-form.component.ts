@@ -95,6 +95,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.listenerRef();
+    this.saveForm(this.theForm.value);
   }
 
   buildNewForm() {
@@ -178,17 +179,20 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       debounceTime(4000),
       switchMap(x => { 
         if (this.theForm.dirty){
-          this.theForm.markAsPristine();
-
           return this.saveForm(x);
         }
         return of();
       })
-    ).subscribe(response => {
-      if (response)
+      ).subscribe(response => {
+      if (response == true)
+        {
+        this.theForm.markAsPristine();
         this.snackBar.open('Form Saved Successfully', null, { duration: 2500, panelClass: 'snackbar-positive' });
-      else
+      }
+      else if (response == false)
+      {
         this.snackBar.open('Saved failed', null, { duration: 2500, panelClass: 'snackbar-negative' });
+      }
     });
   }
 
