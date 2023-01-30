@@ -176,7 +176,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     });
 
     this.theForm.valueChanges.pipe(
-      debounceTime(4000),
+      debounceTime(2000),
       switchMap(x => { 
         if (this.theForm.dirty){
           return this.saveForm(x);
@@ -185,7 +185,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       })
       ).subscribe(response => {
       if (response == true)
-        {
+      {
         this.theForm.markAsPristine();
         this.snackBar.open('Form Saved Successfully', null, { duration: 2500, panelClass: 'snackbar-positive' });
       }

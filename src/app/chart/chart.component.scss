@@ -1,6 +1,10 @@
-.advanced-pie-legend {
-    display: flex;
-    flex-flow: column;
-    background-color: dimgrey;
-    padding: 6px;
+.chart-wrapper {
+    position: absolute;
+    top: 165px;
+    bottom: 50px;
+    left: 50px;
+    right: 50px;
+    border: 2px solid white;
+    background-color: dimgray;
+    border-radius: 16px;
 }

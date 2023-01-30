@@ -209,8 +209,9 @@
                                              [matRippleCentered]="true"
                                              [matRippleUnbounded]="true"
                                              [matRippleRadius]="24"
-                                             [matRippleColor]="rippleColor">
-                                            <div class="question-image-button" *ngIf="question.get('selected').value">
+                                             [matRippleColor]="rippleColor"
+                                             *ngIf="question.get('selected').value">
+                                            <div class="question-image-button">
                                                 <mat-icon>image</mat-icon>
                                             </div>
                                         </div>
