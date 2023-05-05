@@ -14,10 +14,10 @@
                            placeholder="What is your question?" 
                            id="questionId" />
                     
-                    <mat-error *ngIf="question.errors?.required">
+                    <mat-error *ngIf="question.hasError('required')">
                         You must ask a question
                     </mat-error>
-                    <mat-error *ngIf="question.errors?.pattern">
+                    <mat-error *ngIf="question.hasError('pattern')">
                         The question cannot be only spaces
                     </mat-error>
                 </mat-form-field>
@@ -82,10 +82,10 @@
                                placeholder="Option" 
                                id="{{'textId'+i}}" />
     
-                        <mat-error *ngIf="option.get('text').errors?.required">
+                        <mat-error *ngIf="option.get('text').hasError('required')">
                             You can not have an empty choice
                         </mat-error>
-                        <mat-error *ngIf="option.get('text').errors?.pattern">
+                        <mat-error *ngIf="option.get('text').hasError('pattern')">
                             A choice must not be only spaces
                         </mat-error>
                     </mat-form-field>

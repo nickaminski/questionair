@@ -23,30 +23,31 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   selectedQuestionType: any;
   selectedElem: any;
-
+  
   currentSectionIndex = 0;
   currentQuestionIndex = -1;
-
+  
   listenerRef: any;
   rippleColor = 'rgba(0, 0, 0, .25)';
-
+  
   sidePanelHeightCorrect = 335;
-
+  
   scrollingSubject: Subject<boolean>;
   scrollingObservable$: Observable<boolean>;
   scollingInstantObservable$: Observable<boolean>;
 
   scrollTargetId = 'scrollingElement';
-
+  
   sidePanelPos = 0; 
   scrollCorrect = -76;
-
+  
   sidePanelContainerPos = 0;  
-
+  
+  
   get sections(): UntypedFormArray {
     return <UntypedFormArray>this.theForm.get('sections');
   }
-
+  
   get sectionIds(): string[] {
     return this.sections.controls.map(x => x.get('sectionId').value);
   }
@@ -54,11 +55,11 @@ export class CreateFormComponent implements OnInit, OnDestroy {
   questions(sectionIndex: number): UntypedFormArray {
     return <UntypedFormArray>this.sections.at(sectionIndex).get('questions');
   }
-
+  
   choices(sectionIndex: number, questionIndex: number): UntypedFormArray {
     return <UntypedFormArray>this.questions(sectionIndex).at(questionIndex).get('answerContent').get('choices');
   }
-
+  
   rows(sectionIndex: number, questionIndex: number): UntypedFormArray {
     return <UntypedFormArray>this.questions(sectionIndex).at(questionIndex).get('answerContent').get('rows');
   }
@@ -81,11 +82,13 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const id = params.formId;
+      const id = params['formId'];
       if (id) {
         this.formService.getForm(id)
-                        .subscribe(response => this.generateExistingForm(response),
-                                   err => this.router.navigate(['/edit']));
+                        .subscribe({
+                          next: response => this.generateExistingForm(response),
+                          error: err => this.router.navigate(['/edit'])
+                        });
       }
       else {
         this.buildNewForm();
@@ -95,7 +98,6 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.listenerRef();
-    this.saveForm(this.theForm.value);
   }
 
   buildNewForm() {
@@ -184,15 +186,15 @@ export class CreateFormComponent implements OnInit, OnDestroy {
         return of();
       })
       ).subscribe(response => {
-      if (response == true)
-      {
-        this.theForm.markAsPristine();
-        this.snackBar.open('Form Saved Successfully', null, { duration: 2500, panelClass: 'snackbar-positive' });
-      }
-      else if (response == false)
-      {
-        this.snackBar.open('Saved failed', null, { duration: 2500, panelClass: 'snackbar-negative' });
-      }
+        if (response == true)
+        {
+          this.theForm.markAsPristine();
+          this.snackBar.open('Form Saved Successfully', null, { duration: 2500, panelClass: 'snackbar-positive' });
+        }
+        else if (response == false)
+        {
+          this.snackBar.open('Saved failed', null, { duration: 2500, panelClass: 'snackbar-negative' });
+        }
     });
   }
 

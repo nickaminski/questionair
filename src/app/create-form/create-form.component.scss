@@ -217,7 +217,7 @@ form {
 }
 
 .text-answer {
-    margin: 0 24px;
+    margin: 0 12px;
 }
 
 .short-text-answer {
@@ -311,11 +311,11 @@ form {
 .title-card-content {
     display: flex;
     flex-flow: column;
-    margin-top: -32px;
 }
 
 .title-card-row {
     display: flex;
+    padding: 0 12px;
 }
 
 .title-card-text-wrapper {
@@ -398,7 +398,7 @@ mat-form-field {
 
 .card-row {
     display: flex;
-    padding-left: 12px;
+    padding: 0 12px;
 }
 
 .example-list {
@@ -461,6 +461,7 @@ mat-card {
 
 .list-text {
     flex: 1;
+    margin-right: 12px;
 }
 
 .list-controls {
@@ -524,7 +525,6 @@ mat-select:last-child {
 
 .answer-section {
     margin-bottom: 24px;
-    margin-left: -12px;
 }
 
 .thin-field {

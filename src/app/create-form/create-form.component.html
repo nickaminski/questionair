@@ -101,7 +101,7 @@
                         <div class="title-card-row">
                             <div class="title-card-text-wrapper">
                                 <div class="title-card-text">
-                                    <mat-form-field [floatLabel]="'never'" class="thin-field">
+                                    <mat-form-field class="thin-field">
                                         <textarea matInput
                                                   style="height: 35px !important;"
                                                   placeholder="Form title" 
@@ -148,7 +148,7 @@
                         <div class="title-card-row">
                             <div class="title-card-description-wrapper">
                                 <div class="title-card-description">
-                                    <mat-form-field [floatLabel]="'never'">
+                                    <mat-form-field>
                                         
                                             <textarea  matInput 
                                                        style="height: 21px !important;"
@@ -195,7 +195,7 @@
          
                                     <div class="card-row">
                                    
-                                        <mat-form-field [appearance]="question.get('selected').value?'fill':'standard'" style="font-size: 16px;">
+                                        <mat-form-field [appearance]="question.get('selected').value?'fill':'outline'" style="font-size: 16px;">
                                             <textarea matInput
                                                       placeholder="Question" 
                                                       cdkTextareaAutosize="true"
@@ -217,7 +217,6 @@
                                         </div>
                                     
                                         <mat-form-field *ngIf="question.get('selected').value" style="max-width: 224px;">
-         
                                             <mat-select formControlName="questionType">
                                                 <mat-select-trigger>
                                                     <div style="display: flex; align-items: center;">
@@ -237,8 +236,8 @@
 
                                     <div class="answer-section" formGroupName="answerContent">
 
-                                        <div class="card-row" style="padding-left: 24px; padding-bottom: 8px;" *ngIf="showOption(question, 'showDescription')">
-                                            <mat-form-field [floatLabel]="'never'" style="font-size: 12px; letter-spacing: .3px; line-height: 16px; min-height: 20px;">
+                                        <div class="card-row" style="padding-bottom: 8px;" *ngIf="showOption(question, 'showDescription')">
+                                            <mat-form-field style="font-size: 12px; letter-spacing: .3px; line-height: 16px; min-height: 20px;">
                                                 <input matInput formControlName="description" placeholder="Description" />
                                             </mat-form-field>
                                         </div>
@@ -447,14 +446,14 @@
      
                                                 <div class="file-row">
                                                     <div style="font-size: 14px; line-height: 20px; padding-right: 10px; width: 20px;">{{question.get('answerContent').get('minValue').value}}</div>
-                                                    <mat-form-field style="width: 200px;" [floatLabel]="'never'">
+                                                    <mat-form-field style="width: 200px;">
                                                         <input matInput placeholder="Label (optional)" formControlName="minLabel" />
                                                     </mat-form-field>
                                                 </div>
      
                                                 <div class="file-row">
                                                     <div style="font-size: 14px; line-height: 20px; padding-right: 10px; width: 20px;">{{question.get('answerContent').get('maxValue').value}}</div>
-                                                    <mat-form-field style="width: 200px;" [floatLabel]="'never'">
+                                                    <mat-form-field style="width: 200px;">
                                                         <input matInput placeholder="Label (optional)" formControlName="maxLabel" />
                                                     </mat-form-field>
                                                 </div>
