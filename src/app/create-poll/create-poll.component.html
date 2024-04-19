@@ -37,7 +37,7 @@
 
                 <div class="expiration-date-time">
 
-                    <mat-form-field style="max-width: 145px; margin-left: 8px;">
+                    <mat-form-field style="max-width: 155px; margin-left: 8px;">
                         <input matInput
                                [matDatepicker]="picker"
                                placeholder="Expiration Date"
@@ -55,14 +55,14 @@
                             </mat-select>
                         </mat-form-field>
     
-                        <mat-form-field style="max-width: 80px; margin-left: 8px;">
+                        <mat-form-field style="max-width: 90px; margin-left: 8px;">
                             <mat-label>Minute</mat-label>
                             <mat-select formControlName="minute">
                                 <mat-option *ngFor="let minute of minutes" [value]="minute">{{minute}}</mat-option>
                             </mat-select>
                         </mat-form-field>
     
-                        <mat-button-toggle-group formControlName="meridiem" style="margin-left: 8px;">
+                        <mat-button-toggle-group formControlName="meridiem" style="margin-left: 8px; margin-bottom: 22px;">
                             <mat-button-toggle value="AM">AM</mat-button-toggle>
                             <mat-button-toggle value="PM">PM</mat-button-toggle>
                         </mat-button-toggle-group>
