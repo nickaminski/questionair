@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreatePollComponent } from './create-poll/create-poll.component';
 import { HomeComponent } from './home/home.component';
-import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withJsonpSupport } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PollCardComponent } from './poll-card/poll-card.component';
 import { ViewPollComponent } from './view-poll/view-poll.component';
@@ -22,33 +22,26 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { FormCardComponent } from './form-card/form-card.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    CreatePollComponent,
-    HomeComponent,
-    PollCardComponent,
-    ViewPollComponent,
-    PollResultsComponent,
-    ChartComponent,
-    PadPipe,
-    CreateFormComponent,
-    FormCardComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    AppMaterialModule,
-    LayoutModule,
-    ReactiveFormsModule,
-    OverlayModule,
-    HttpClientModule,
-    HttpClientJsonpModule,
-    DragDropModule,
-    GoogleMapsModule,
-    NgxChartsModule
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        CreatePollComponent,
+        HomeComponent,
+        PollCardComponent,
+        ViewPollComponent,
+        PollResultsComponent,
+        ChartComponent,
+        PadPipe,
+        CreateFormComponent,
+        FormCardComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        AppMaterialModule,
+        LayoutModule,
+        ReactiveFormsModule,
+        OverlayModule,
+        DragDropModule,
+        GoogleMapsModule,
+        NgxChartsModule], providers: [provideHttpClient(withInterceptorsFromDi(), withJsonpSupport())] })
 export class AppModule { }
